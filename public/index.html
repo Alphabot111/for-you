@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>For You ❤️</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body data-theme="dark">
+
+  <!-- Ambient floating hearts layer (populated by JS, sits behind everything) -->
+  <div id="hearts-layer" class="hearts-layer" aria-hidden="true"></div>
+
+  <!-- Loading screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-heart">❤</div>
+    <p class="loading-text">Loading something special…</p>
+  </div>
+
+  <!-- Top utility bar: theme toggle + music mute -->
+  <div class="utility-bar">
+    <button id="theme-toggle" class="icon-btn" title="Toggle light / dark mode" aria-label="Toggle theme">🌙</button>
+    <button id="music-toggle" class="icon-btn" title="Mute / unmute music" aria-label="Toggle music">🔈</button>
+  </div>
+  <audio id="bg-music" loop preload="none">
+    <source src="/sounds/background-music.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Toast notification container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+  <main id="app" class="app">
+
+    <!-- ============================= PAGE 1 — WELCOME ============================= -->
+    <section class="page page-welcome active" data-page="welcome">
+      <div class="glass-card entrance">
+        <div class="welcome-heart">❤️</div>
+        <h1 class="display-text">Hey <span class="heart-inline">❤️</span></h1>
+        <p class="body-text">I built something special just for you.</p>
+        <p class="body-text">It only takes 2 minutes,<br>and I'd really love for you to see it.</p>
+        <button class="btn btn-primary btn-large" data-next="about-her">Begin</button>
+      </div>
+    </section>
+
+    <!-- ============================= PAGE 2 — ABOUT HER ============================= -->
+    <section class="page page-questions" data-page="about-her">
+      <div class="glass-card questions-card">
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" data-progress-for="about-her"></div></div>
+          <span class="progress-label" data-progress-label="about-her">1 / 10</span>
+        </div>
+        <h2 class="section-title">Tell me about you</h2>
+        <form id="form-about-her" class="question-form" data-flow="about-her"></form>
+      </div>
+    </section>
+
+    <!-- ============================= PAGE 3 — ABOUT ME ============================= -->
+    <section class="page page-questions" data-page="about-me">
+      <div class="glass-card questions-card">
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" data-progress-for="about-me"></div></div>
+          <span class="progress-label" data-progress-label="about-me">1 / 7</span>
+        </div>
+        <h2 class="section-title">A few questions about us</h2>
+        <form id="form-about-me" class="question-form" data-flow="about-me"></form>
+      </div>
+    </section>
+
+    <!-- ============================= PAGE 4 — THE TWIST ============================= -->
+    <section class="page page-twist" data-page="twist">
+      <div class="twist-stage">
+        <p id="twist-text" class="typewriter-text"></p>
+        <button id="twist-continue" class="btn btn-ghost twist-continue hidden">Continue</button>
+      </div>
+    </section>
+
+    <!-- ============================= PAGE 5 — CONFESSION ============================= -->
+    <section class="page page-confession" data-page="confession">
+      <div class="glass-card confession-card">
+        <div id="confession-text" class="confession-text"></div>
+        <div id="confession-actions" class="confession-actions hidden">
+          <button class="btn btn-primary" data-decision="yes">❤️ Yes</button>
+          <button class="btn btn-secondary" data-decision="lets-talk">😊 Let's Talk</button>
+          <button class="btn btn-ghost" data-decision="need-time">🌹 I Need Time</button>
+        </div>
+        <div id="need-time-response" class="need-time-response hidden">
+          <p>That's okay.</p>
+          <p>I'll wait patiently.</p>
+          <p>No pressure.</p>
+          <p>Thank you for being honest ❤️</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= PAGE 6 — CHAT ============================= -->
+    <section class="page page-chat" data-page="chat">
+      <div class="chat-shell glass-card">
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <span class="chat-avatar">💬</span>
+            <div>
+              <div class="chat-title" id="chat-partner-name">Us</div>
+              <div class="chat-status" id="chat-online-status">offline</div>
+            </div>
+          </div>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="chat-typing-indicator" class="chat-typing-indicator hidden">typing…</div>
+        <form id="chat-form" class="chat-input-row">
+          <button type="button" id="emoji-toggle" class="icon-btn" aria-label="Emoji picker">😊</button>
+          <div id="emoji-picker" class="emoji-picker hidden"></div>
+          <input id="chat-input" type="text" maxlength="1000" placeholder="Type a message…" autocomplete="off" />
+          <button type="submit" class="btn btn-primary chat-send">Send</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/hearts.js"></script>
+  <script src="/js/confetti.js"></script>
+  <script src="/js/chat.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

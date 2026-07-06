@@ -1,0 +1,618 @@
+/* =========================================================================
+   For You ❤️ — main stylesheet
+   Design tokens
+   -----------------------------------------------------------------------
+   Color:
+     --deep-plum   #1a0f2e   ambient dark backdrop
+     --pink-500    #ff6fb5   primary romance accent
+     --purple-500  #9b5de5   secondary accent
+     --purple-700  #6a3093   deep gradient anchor
+     --gold-400    #ffd166   warm celebratory accent (confetti / "yes")
+     --lavender-50 #f6eeff   light-mode background
+   Type:
+     Display — 'Playfair Display' (romantic serif, used sparingly for
+       headlines and the confession text)
+     Body    — 'Poppins' (soft, rounded, warm — everything else)
+   Signature:
+     A slow "breathing" gradient aura behind the glass card, paired with
+     hearts drifting upward through the whole experience.
+   ========================================================================= */
+
+:root {
+  --deep-plum: #1a0f2e;
+  --deep-plum-2: #241536;
+  --pink-500: #ff6fb5;
+  --pink-300: #ffa9d1;
+  --purple-500: #9b5de5;
+  --purple-700: #6a3093;
+  --gold-400: #ffd166;
+  --lavender-50: #f6eeff;
+  --text-light: #fdf6ff;
+  --text-muted: rgba(253, 246, 255, 0.7);
+  --glass-bg: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --shadow-soft: 0 20px 60px rgba(50, 10, 60, 0.45);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Poppins', 'Segoe UI', sans-serif;
+  --transition-fast: 0.25s ease;
+  --transition-slow: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-theme="light"] {
+  --deep-plum: #fdf3fb;
+  --deep-plum-2: #fbe7f6;
+  --text-light: #3a2044;
+  --text-muted: rgba(58, 32, 68, 0.65);
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(155, 93, 229, 0.25);
+  --shadow-soft: 0 20px 50px rgba(155, 93, 229, 0.18);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text-light);
+  background: radial-gradient(circle at 20% 20%, var(--purple-700), transparent 55%),
+              radial-gradient(circle at 80% 0%, var(--pink-500), transparent 45%),
+              radial-gradient(circle at 50% 100%, var(--purple-500), transparent 60%),
+              var(--deep-plum);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  transition: background var(--transition-slow), color var(--transition-slow);
+}
+
+/* ------------------------------ Utility bar ----------------------------- */
+
+.utility-bar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 60;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  color: var(--text-light);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+.icon-btn:hover { transform: scale(1.08); background: rgba(255,255,255,0.18); }
+.icon-btn:active { transform: scale(0.96); }
+
+/* -------------------------------- Loading -------------------------------- */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--deep-plum);
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.loading-heart {
+  font-size: 48px;
+  color: var(--pink-500);
+  animation: heartbeat 1.1s ease-in-out infinite;
+}
+.loading-text {
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  font-size: 14px;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  40% { transform: scale(0.98); }
+  60% { transform: scale(1.1); }
+}
+
+/* ------------------------------ Floating hearts -------------------------- */
+
+.hearts-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -40px;
+  color: var(--pink-300);
+  opacity: 0.55;
+  will-change: transform, opacity;
+  animation-name: float-up;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes float-up {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-115vh) translateX(var(--drift, 30px)) rotate(25deg); opacity: 0; }
+}
+
+/* --------------------------------- Layout -------------------------------- */
+
+.app {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+}
+
+.page {
+  display: none;
+  min-height: 100vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+.page.active {
+  display: flex;
+  animation: page-fade-in 0.7s var(--transition-slow);
+}
+
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------- Glass card ----------------------------- */
+
+.glass-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: var(--shadow-soft);
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  animation: aura-breathe 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes aura-breathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.75; }
+}
+
+.entrance { animation: card-entrance 0.9s var(--transition-slow); }
+@keyframes card-entrance {
+  from { opacity: 0; transform: scale(0.9) translateY(30px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.welcome-heart {
+  font-size: 42px;
+  margin-bottom: 8px;
+  animation: heartbeat 1.6s ease-in-out infinite;
+}
+
+.display-text {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.body-text {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0 0 14px;
+}
+
+.heart-inline { display: inline-block; animation: heartbeat 1.4s ease-in-out infinite; }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  margin: 4px 0 24px;
+}
+
+/* --------------------------------- Buttons -------------------------------- */
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 26px;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+}
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
+  color: white;
+  box-shadow: 0 10px 26px rgba(155, 93, 229, 0.45);
+}
+.btn-primary:hover { box-shadow: 0 14px 32px rgba(155, 93, 229, 0.6); transform: translateY(-2px); }
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+}
+.btn-secondary:hover { background: rgba(255, 255, 255, 0.24); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+
+.btn-large { padding: 16px 40px; font-size: 16px; margin-top: 10px; }
+
+.btn-disabled, .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* -------------------------------- Progress -------------------------------- */
+
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--pink-500), var(--purple-500));
+  border-radius: 999px;
+  transition: width 0.5s var(--transition-slow);
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* -------------------------------- Questions -------------------------------- */
+
+.questions-card { text-align: left; }
+
+.question-form { position: relative; min-height: 210px; }
+
+.question-step {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  animation: q-slide-in 0.45s var(--transition-slow);
+}
+.question-step.active { display: flex; }
+
+@keyframes q-slide-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.question-label {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.question-input {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+.question-input:focus {
+  border-color: var(--pink-500);
+  background: rgba(255, 255, 255, 0.14);
+}
+.question-input::placeholder { color: var(--text-muted); }
+
+.question-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* -------------------------------- Twist page -------------------------------- */
+
+.page-twist { background: rgba(0,0,0,0.35); }
+
+.twist-stage {
+  max-width: 560px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.typewriter-text {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 5vw, 34px);
+  line-height: 1.7;
+  min-height: 3.4em;
+  white-space: pre-wrap;
+}
+
+.typewriter-text .cursor {
+  display: inline-block;
+  width: 2px;
+  background: var(--pink-300);
+  margin-left: 2px;
+  animation: blink 0.85s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.twist-continue { margin-top: 30px; }
+.hidden { display: none !important; }
+
+/* -------------------------------- Confession -------------------------------- */
+
+.confession-card { max-width: 520px; }
+
+.confession-text {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.85;
+  text-align: left;
+}
+.confession-text p { margin: 0 0 14px; opacity: 0; animation: line-reveal 0.7s forwards; }
+@keyframes line-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.confession-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.need-time-response {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.8;
+  margin-top: 10px;
+}
+.need-time-response p { margin: 0 0 8px; opacity: 0; animation: line-reveal 0.6s forwards; }
+
+/* -------------------------------- Toasts -------------------------------- */
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(30, 15, 40, 0.9);
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  box-shadow: var(--shadow-soft);
+  animation: toast-in 0.35s var(--transition-slow), toast-out 0.4s ease 2.6s forwards;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(-14px);} to { opacity: 1; transform: translateY(0);} }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-10px);} }
+
+/* -------------------------------- Confetti -------------------------------- */
+
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+/* --------------------------------- Chat ---------------------------------- */
+
+.page-chat { align-items: stretch; padding: 0; }
+
+.chat-shell {
+  max-width: 560px;
+  width: 100%;
+  margin: 16px auto;
+  height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--glass-border);
+}
+.chat-header-info { display: flex; align-items: center; gap: 12px; }
+.chat-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.chat-title { font-weight: 600; font-size: 15px; }
+.chat-status { font-size: 12px; color: var(--text-muted); }
+.chat-status.online { color: #6de29a; }
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-bubble {
+  max-width: 75%;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  position: relative;
+  animation: bubble-in 0.25s ease;
+  word-wrap: break-word;
+}
+@keyframes bubble-in { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
+
+.chat-bubble.me {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--pink-500), var(--purple-500));
+  color: white;
+  border-bottom-right-radius: 6px;
+}
+.chat-bubble.her {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid var(--glass-border);
+  border-bottom-left-radius: 6px;
+}
+
+.chat-meta {
+  display: block;
+  font-size: 10.5px;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.chat-typing-indicator {
+  padding: 0 20px 6px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.chat-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--glass-border);
+  position: relative;
+}
+
+.chat-input-row input {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.08);
+  color: var(--text-light);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  outline: none;
+}
+.chat-input-row input:focus { border-color: var(--pink-500); }
+
+.chat-send { padding: 11px 20px; }
+
+.emoji-picker {
+  position: absolute;
+  bottom: 60px;
+  left: 12px;
+  background: var(--deep-plum-2);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  box-shadow: var(--shadow-soft);
+  z-index: 10;
+}
+.emoji-picker button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 4px;
+}
+.emoji-picker button:hover { background: rgba(255,255,255,0.12); }
+
+/* -------------------------------- Responsive -------------------------------- */
+
+@media (max-width: 480px) {
+  .glass-card { padding: 30px 22px; border-radius: 22px; }
+  .display-text { font-size: 28px; }
+  .chat-shell { margin: 0; height: 100vh; border-radius: 0; }
+  .confession-text { font-size: 16.5px; }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

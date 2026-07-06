@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — For You</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-login-card">
+    <h1>🔒 Admin Access</h1>
+    <p class="admin-subtitle">This area is private.</p>
+    <% if (error) { %>
+      <div class="admin-error"><%= error %></div>
+    <% } %>
+    <form method="POST" action="/admin/login" class="admin-login-form">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required autofocus />
+      <button type="submit">Enter</button>
+    </form>
+  </div>
+</body>
+</html>

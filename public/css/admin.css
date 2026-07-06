@@ -1,0 +1,182 @@
+/* public/css/admin.css — plain, functional styling for the private admin area */
+
+* { box-sizing: border-box; }
+
+body.admin-body {
+  margin: 0;
+  min-height: 100vh;
+  background: #1b1523;
+  color: #eee6f7;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  padding: 24px;
+}
+
+.admin-login-card {
+  max-width: 360px;
+  margin: 10vh auto;
+  background: #241a30;
+  border: 1px solid #3a2a4d;
+  border-radius: 14px;
+  padding: 32px;
+  text-align: center;
+}
+
+.admin-subtitle {
+  color: #b3a2c9;
+  margin-bottom: 20px;
+}
+
+.admin-error {
+  background: #4a1f2b;
+  color: #ffb3c1;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.admin-login-form label {
+  font-size: 13px;
+  color: #b3a2c9;
+}
+
+.admin-login-form input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #3a2a4d;
+  background: #171021;
+  color: #eee6f7;
+  font-size: 15px;
+}
+
+.admin-login-form button,
+.admin-btn-secondary,
+.admin-btn-danger {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-login-form button {
+  background: linear-gradient(135deg, #d879b8, #9d6fe0);
+  color: white;
+  margin-top: 8px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto 24px;
+}
+
+.admin-btn-secondary {
+  background: #3a2a4d;
+  color: #eee6f7;
+}
+
+.admin-btn-danger {
+  background: #6b2436;
+  color: #ffcdd8;
+}
+
+.admin-section {
+  max-width: 900px;
+  margin: 0 auto 32px;
+}
+
+.admin-section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-empty {
+  color: #8a7aa0;
+  font-style: italic;
+}
+
+.admin-card {
+  background: #241a30;
+  border: 1px solid #3a2a4d;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+
+.admin-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #9a89b3;
+}
+
+.admin-session-id {
+  font-weight: 600;
+  color: #d0bfe8;
+}
+
+.admin-decision {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.admin-decision-yes { background: #2c4a33; color: #b4f0c2; }
+.admin-decision-lets-talk { background: #2c3a4a; color: #b4d8f0; }
+.admin-decision-need-time { background: #4a3a2c; color: #f0d8b4; }
+
+.admin-answer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.admin-chat-log {
+  background: #171021;
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.admin-chat-line {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #241a30;
+}
+
+.admin-chat-sender {
+  font-weight: 700;
+  min-width: 60px;
+}
+
+.admin-chat-sender-her { color: #f0a8d0; }
+.admin-chat-sender-me { color: #a8c8f0; }
+
+.admin-chat-time {
+  margin-left: auto;
+  color: #6f5f85;
+  font-size: 12px;
+}

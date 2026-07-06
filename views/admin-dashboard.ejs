@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — For You</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="admin-body">
+  <header class="admin-header">
+    <h1>💌 Admin Dashboard</h1>
+    <form method="POST" action="/admin/logout">
+      <button type="submit" class="admin-btn-secondary">Log out</button>
+    </form>
+  </header>
+
+  <section class="admin-section">
+    <h2>Submissions (<%= submissions.length %>)</h2>
+    <% if (submissions.length === 0) { %>
+      <p class="admin-empty">No submissions yet.</p>
+    <% } %>
+
+    <% submissions.forEach(function(sub) { %>
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <span class="admin-session-id">Session: <%= sub.sessionId.slice(0, 8) %>…</span>
+          <span class="admin-timestamp">
+            Submitted: <%= sub.createdAt ? new Date(sub.createdAt).toLocaleString() : '—' %>
+            &nbsp;|&nbsp;
+            Updated: <%= sub.updatedAt ? new Date(sub.updatedAt).toLocaleString() : '—' %>
+          </span>
+        </div>
+
+        <% if (sub.decision) { %>
+          <div class="admin-decision admin-decision-<%= sub.decision %>">
+            Decision: <strong><%= sub.decision %></strong>
+          </div>
+        <% } %>
+
+        <% if (sub.aboutHer) { %>
+          <h3>About Her</h3>
+          <ul class="admin-answer-list">
+            <% Object.keys(sub.aboutHer).forEach(function(key) { %>
+              <li><strong><%= key %>:</strong> <%= sub.aboutHer[key] %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+
+        <% if (sub.aboutMe) { %>
+          <h3>About Me (her answers about you)</h3>
+          <ul class="admin-answer-list">
+            <% Object.keys(sub.aboutMe).forEach(function(key) { %>
+              <li><strong><%= key %>:</strong> <%= sub.aboutMe[key] %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+
+        <form method="POST" action="/admin/submissions/<%= sub.sessionId %>/delete"
+              onsubmit="return confirm('Delete this submission permanently?');">
+          <button type="submit" class="admin-btn-danger">Delete Submission</button>
+        </form>
+      </div>
+    <% }) %>
+  </section>
+
+  <section class="admin-section">
+    <div class="admin-section-header-row">
+      <h2>Chat History (<%= chatHistory.length %> messages)</h2>
+      <form method="POST" action="/admin/chat/clear"
+            onsubmit="return confirm('Clear the entire chat history permanently?');">
+        <button type="submit" class="admin-btn-danger">Clear Chat</button>
+      </form>
+    </div>
+    <% if (chatHistory.length === 0) { %>
+      <p class="admin-empty">No messages yet.</p>
+    <% } %>
+    <div class="admin-chat-log">
+      <% chatHistory.forEach(function(m) { %>
+        <div class="admin-chat-line">
+          <span class="admin-chat-sender admin-chat-sender-<%= m.sender %>"><%= m.sender %></span>
+          <span class="admin-chat-text"><%= m.text %></span>
+          <span class="admin-chat-time"><%= new Date(m.timestamp).toLocaleString() %></span>
+        </div>
+      <% }) %>
+    </div>
+  </section>
+</body>
+</html>

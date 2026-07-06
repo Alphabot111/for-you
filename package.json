@@ -1,0 +1,23 @@
+{
+  "name": "for-you",
+  "version": "1.0.0",
+  "description": "A romantic interactive web experience — For You ❤️",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "socket.io": "^4.7.5",
+    "escape-html": "^1.0.3",
+    "express-rate-limit": "^7.2.0",
+    "dotenv": "^16.4.5",
+    "uuid": "^9.0.1",
+    "ejs": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
